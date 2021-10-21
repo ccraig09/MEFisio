@@ -13,8 +13,7 @@ import {
 import Colors from "../constants/Colors";
 
 const CategoryItem = (props) => {
-  let logoimg = "../assets/icon-noexlogo.png";
-
+  let logoimg = "../assets/mayraLogo.png";
   let TouchableCmp = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -28,17 +27,22 @@ const CategoryItem = (props) => {
           <TouchableCmp onPress={props.onClassClick} useForeground>
             <View>
               <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{ uri: props.image }} />
+                <Image
+                  style={styles.image}
+                  source={props.image}
+                  // source={{ uri: props.image }}
+                />
               </View>
               {/* <View style={styles.details}> */}
               {/* <Image style={styles.logo} source={require(logoimg)} /> */}
               <View style={styles.wrapper}>
                 <View style={styles.levelWrapper}>
                   <Text style={styles.subtitle}>{props.subtitle}</Text>
-                  <Text style={styles.caption}>Tiempo: {props.time}</Text>
+                  <Text style={styles.subDetail}>{props.subDetail}</Text>
+                  {/* <Text style={styles.caption}>Tiempo: {props.time}</Text> */}
                 </View>
                 <View style={styles.level}>
-                  <Text style={styles.difficulty}> - {props.difficulty}</Text>
+                  {/* <Text style={styles.difficulty}> - {props.difficulty}</Text> */}
                 </View>
               </View>
               {/* </View> */}
@@ -58,8 +62,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     borderRadius: 10,
-    backgroundColor: "#181818",
-    height: 300,
+    backgroundColor: "white",
+    height: 200,
     margin: 20,
   },
   touchable: {
@@ -76,13 +80,21 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    resizeMode: "stretch",
   },
   subtitle: {
-    color: "yellow",
-    fontSize: 30,
+    color: "white",
+    fontSize: 22,
     fontWeight: "600",
     fontFamily: "open-sans-bold",
-    marginBottom: -5,
+    marginTop: 4,
+  },
+  subDetail: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "500",
+    fontFamily: "open-sans",
+    marginBottom: 5,
   },
   caption: {
     color: "#b8bece",
@@ -100,8 +112,8 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
     height: "30%",
-
-    paddingLeft: 20,
+    backgroundColor: Colors.primary,
+    justifyContent: "center",
   },
   level: {
     justifyContent: "center",
@@ -130,7 +142,9 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   levelWrapper: {
-    alignItems: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 15,
   },
 });
 
