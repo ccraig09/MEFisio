@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList, Button, View } from "react-native";
 import CategoryItem from "../components/CategoryItem";
 
 export default function HomeScreen({ navigation }) {
@@ -48,31 +48,39 @@ export default function HomeScreen({ navigation }) {
   ];
 
   return (
-    <FlatList
-      showsHorizontalScrollIndicator={false}
-      data={data}
-      keyExtractor={(item) => item.key}
-      renderItem={(itemData) => (
-        <CategoryItem
-          image={itemData.item.Image}
-          title={itemData.item.Title}
-          logo={itemData.item.logo}
-          caption={itemData.item.Caption}
-          info={itemData.item.info}
-          subtitle={itemData.item.Subtitle}
-          subDetail={itemData.item.subDetail}
-          difficulty={itemData.item.Difficulty}
-          time={itemData.item.Time}
-          description={itemData.item.description}
-          onClassClick={() => {
-            navigation.navigate("Details", {
-              service: itemData.item,
-              // classes: data,
-            });
-          }}
-        />
-      )}
-    />
+    <View>
+      <Button
+        title=" go to pdf"
+        onPress={() => {
+          navigation.navigate("Pdf");
+        }}
+      />
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        data={data}
+        keyExtractor={(item) => item.key}
+        renderItem={(itemData) => (
+          <CategoryItem
+            image={itemData.item.Image}
+            title={itemData.item.Title}
+            logo={itemData.item.logo}
+            caption={itemData.item.Caption}
+            info={itemData.item.info}
+            subtitle={itemData.item.Subtitle}
+            subDetail={itemData.item.subDetail}
+            difficulty={itemData.item.Difficulty}
+            time={itemData.item.Time}
+            description={itemData.item.description}
+            onClassClick={() => {
+              navigation.navigate("Details", {
+                service: itemData.item,
+                // classes: data,
+              });
+            }}
+          />
+        )}
+      />
+    </View>
   );
 }
 

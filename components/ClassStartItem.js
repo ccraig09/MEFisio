@@ -49,7 +49,7 @@ const ClassStartItem = (props) => {
               }}
             >
               <Text>{"\u2022"}</Text>
-              <Text style={{ flex: 1, paddingLeft: 5, fontSize: 30 }}>
+              <Text style={{ flex: 1, paddingLeft: 5, fontSize: 20 }}>
                 {item}
               </Text>
             </View>
@@ -60,20 +60,15 @@ const ClassStartItem = (props) => {
         />
         <TouchableOpacity
           style={styles.panelButton}
-          // onPress={() => {
-          //   actionSheetRef.current?.hide();
-          // }}
+          onPress={() => {
+            props.onVideoClick();
+          }}
         >
           <Text style={styles.panelButtonTitle}>Reservar</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-};
-
-ClassStartItem.navigationOptions = {
-  title: "Cardio",
-  headerShown: false,
 };
 
 const styles = StyleSheet.create({
