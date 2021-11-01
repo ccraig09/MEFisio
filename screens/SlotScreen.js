@@ -13,19 +13,21 @@ const jsonData = {
     slot1: "9:00am a 9:00am",
     slot2: "10:00am a 10:00am",
     slot3: "11:00am a 12:00am",
-    slot4: "10:00am a 11:00am",
-    slot5: "11:00am a 11:00am",
-    slot6: "11:00am a 12:00pm",
+    slot4: "15:00am a 16:00am",
+    slot5: "17:00am a 18:00am",
+    slot6: "18:00am a 19:00pm",
+    slot7: "19:00am a 20:00pm",
   },
 };
 
 const SlotScreen = ({ route, navigation }) => {
   const [bookingDate, setBookingDate] = useState();
+  const bookParam = route.params;
 
-  useEffect(() => {
-    const bookParam = route.params;
-    setBookingDate(bookParam);
-  }, []);
+  // useEffect(() => {
+  //   setBookingDate(bookParam);
+  //   // console.log("try this", bookingDate.bookingDate.dateString);
+  // }, []);
 
   const bookSlot = (status, key, value) => {
     const month = bookingDate.bookingDate.month;
@@ -46,7 +48,12 @@ const SlotScreen = ({ route, navigation }) => {
       </View>
     );
   });
-  return <View style={styles.container}>{slotsarr}</View>;
+  return (
+    <View style={styles.container}>
+      <Text>Tiempos disponible por {bookParam.bookingDate.dateString}</Text>
+      {slotsarr}
+    </View>
+  );
 };
 const styles = StyleSheet.create({
   container: {

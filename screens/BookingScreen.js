@@ -5,10 +5,14 @@ import {
   View,
   TouchableOpacity,
   StatusBar,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
 // import styles from '../../components/commonstyle'
-import { Calendar } from "react-native-calendars";
+import { CalendarList } from "react-native-calendars";
 import Colors from "../constants/Colors";
+
+let screenHeight = Dimensions.get("window").height;
 
 const BookingScreen = ({ navigation }) => {
   const [selected, setSelected] = useState();
@@ -19,8 +23,15 @@ const BookingScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Calendar
+    <SafeAreaView style={styles.container}>
+      <CalendarList
+        onVisibleMonthsChange={(months) => {
+          // console.log("now these months are visible", months);
+        }}
+        pastScrollRange={50}
+        futureScrollRange={50}
+        scrollEnabled={true}
+        showScrollIndicator={true}
         onDayPress={(day) => {
           onDayPress(day);
         }}
@@ -33,20 +44,23 @@ const BookingScreen = ({ navigation }) => {
           arrowColor: Colors.primary,
         }}
       />
-    </View>
+      {/* <Calendar
+      /> */}
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
   },
   calendar: {
     borderTopWidth: 1,
     paddingTop: 5,
     borderBottomWidth: 1,
     borderColor: "#eee",
-    height: 350,
+    height: screenHeight,
   },
 });
 export default BookingScreen;
