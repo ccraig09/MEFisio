@@ -15,104 +15,21 @@ import * as DocumentPicker from "expo-document-picker";
 
 const PdfScreen = ({ route, navigation }) => {
   const [pdfloaded, setPdfDoc] = useState();
-  // const [
-  //   inputPdfBytes,
-  //   catRidingUnicornBytes,
-  //   cmykBytes,
-  //   normalPdfBase64,
-  //   existingPdfBytes,
-  // ] = Promise.all([
-  //   fetchAsset("pdfs/with_update_sections.pdf"),
-  //   fetchAsset("images/cat_riding_unicorn_resized.jpg"),
-  //   fetchAsset("images/cmyk_colorspace.jpg"),
-  //   fetchAsset("pdfs/normal.pdf"),
-  //   fetchAsset("pdfs/with_annots.pdf"),
-  // ]);
-
-  const chooseDoc = async () => {
-    const response = await fetch(
-      `https://pdf-lib.js.org/assets/dod_character.pdf`
-    );
-    const blob = await response.blob();
-    // setPdfDoc(res.base64());
-    alert(blob);
-    // console.log(blob);
-    // return res.base64();
-
-    // FileSystem.downloadAsync(
-    //   "https://pdf-lib.js.org/assets/dod_character.pdf",
-    //   FileSystem.documentDirectory + "test.pdf"
-    // )
-    //   .then(({ uri }) => {
-    //     console.log("Finished downloading to ", uri);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-  };
-
-  const marioForm = async () => {
-    // Fetch the PDF with form fields
-    const formUrl = "https://pdf-lib.js.org/assets/dod_character.pdf";
-    const formBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
-
-    // Fetch the Ubuntu font
-    const fontUrl = "https://pdf-lib.js.org/assets/ubuntu/Ubuntu-R.ttf";
-    const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
-
-    // Load the PDF with form fields
-    const pdfDoc = await PDFDocument.load(formUrl);
-
-    // Embed the Ubuntu font
-    pdfDoc.registerFontkit(fontkit);
-    const ubuntuFont = await pdfDoc.embedFont(fontBytes);
-
-    // Get two text fields from the form
-    const form = pdfDoc.getForm();
-    const nameField = form.getTextField("CharacterName 2");
-    const ageField = form.getTextField("Age");
-
-    // Fill the text fields with some fancy Unicode characters (outside
-    // the WinAnsi latin character set)
-    nameField.setText("Ӎӑȑїõ");
-    ageField.setText("24 ŷȇȁŗš");
-
-    // **Key Step:** Update the field appearances with the Ubuntu font
-    form.updateFieldAppearances(ubuntuFont);
-
-    // Save the PDF with filled form fields
-    const pdfBytes = await pdfDoc.save();
-  };
 
   const fillForm = async () => {
     let docUri;
     const pickDocument = async () => {
       let result = await DocumentPicker.getDocumentAsync({
         type: "application/pdf",
-        // copyToCacheDirectory: false,
       });
-      // alert(result.uri);
-      // console.log(result);
-      // return result.uri;
       console.log(result);
       docUri = result.uri;
     };
     await pickDocument();
 
-    // const launch = async () => {
-    //   console.log("string s");
-    //   await FileSystem.readAsStringAsync(docUri).then((cUri) => {
-    //     console.log("curi?", cUri);
-    //   });
-    // };
-    // launch();
-    // const getInfo = await FileSystem.getInfoAsync(docUri);
-    // console.log("get info", getInfo);
     const formPdfBytes = await FileSystem.readAsStringAsync(docUri, {
       encoding: FileSystem.EncodingType.Base64,
     });
-
-    // console.log("result!", formPdfBytes);
 
     const pdfDoc = await PDFDocument.load(formPdfBytes);
     // console.log(pdfDoc.context.header.toString());
@@ -125,82 +42,91 @@ const PdfScreen = ({ route, navigation }) => {
     const form = pdfDoc.getForm();
 
     // Get all fields in the PDF by their names
-    const nameField = form.getTextField("CharacterName 2");
-    const ageField = form.getTextField("Age");
-    const heightField = form.getTextField("Height");
-    const weightField = form.getTextField("Weight");
-    const eyesField = form.getTextField("Eyes");
-    const skinField = form.getTextField("Skin");
-    const hairField = form.getTextField("Hair");
+    const nameField = form.getTextField("name");
+    const genderField = form.getTextField("gender");
+    const pesoField = form.getTextField("peso");
+    const motivoField = form.getTextField("motivo");
+    // const ageField = form.getTextField("Age");
+    // const heightField = form.getTextField("Height");
+    // const weightField = form.getTextField("Weight");
+    // const eyesField = form.getTextField("Eyes");
+    // const skinField = form.getTextField("Skin");
+    // const hairField = form.getTextField("Hair");
 
-    const alliesField = form.getTextField("Allies");
-    const factionField = form.getTextField("FactionName");
-    const backstoryField = form.getTextField("Backstory");
-    const traitsField = form.getTextField("Feat+Traits");
-    const treasureField = form.getTextField("Treasure");
+    // const alliesField = form.getTextField("Allies");
+    // const factionField = form.getTextField("FactionName");
+    // const backstoryField = form.getTextField("Backstory");
+    // const traitsField = form.getTextField("Feat+Traits");
+    // const treasureField = form.getTextField("Treasure");
 
     // const characterImageField = form.getButton("CHARACTER IMAGE");
     // const factionImageField = form.getTextField("Faction Symbol Image");
 
     // Fill in the basic info fields
-    nameField.setText("Mario");
-    ageField.setText("24 years");
-    heightField.setText(`5' 1"`);
-    weightField.setText("196 lbs");
-    eyesField.setText("blue");
-    skinField.setText("white");
-    hairField.setText("brown");
+
+    nameField.setText("Carlos");
+    genderField.setText("Masculino");
+    pesoField.setText("192");
+    motivoField.setText(
+      "el motivo por este visito es para probar la applicacion y blah blah estoy probando texto largo para llenar espacio."
+    );
+    // ageField.setText("24 years");
+    // heightField.setText(`5' 1"`);
+    // weightField.setText("196 lbs");
+    // eyesField.setText("blue");
+    // skinField.setText("white");
+    // hairField.setText("brown");
 
     // Fill the character image field with our Mario image
     // characterImageField.setImage(marioImage);
 
     // Fill in the allies field
-    alliesField.setText(
-      [
-        `Allies:`,
-        `  • Princess Daisy`,
-        `  • Princess Peach`,
-        `  • Rosalina`,
-        `  • Geno`,
-        `  • Luigi`,
-        `  • Donkey Kong`,
-        `  • Yoshi`,
-        `  • Diddy Kong`,
-        ``,
-        `Organizations:`,
-        `  • Italian Plumbers Association`,
-      ].join("\n")
-    );
+    // alliesField.setText(
+    //   [
+    //     `Allies:`,
+    //     `  • Princess Daisy`,
+    //     `  • Princess Peach`,
+    //     `  • Rosalina`,
+    //     `  • Geno`,
+    //     `  • Luigi`,
+    //     `  • Donkey Kong`,
+    //     `  • Yoshi`,
+    //     `  • Diddy Kong`,
+    //     ``,
+    //     `Organizations:`,
+    //     `  • Italian Plumbers Association`,
+    //   ].join("\n")
+    // );
 
-    // Fill in the faction name field
-    factionField.setText(`Mario's Emblem`);
+    // // Fill in the faction name field
+    // factionField.setText(`Mario's Emblem`);
 
-    // Fill the faction image field with our emblem image
-    // factionImageField.setImage(emblemImage);
+    // // Fill the faction image field with our emblem image
+    // // factionImageField.setImage(emblemImage);
 
-    // Fill in the backstory field
-    backstoryField.setText(
-      `Mario is a fictional character in the Mario video game franchise, owned by Nintendo and created by Japanese video game designer Shigeru Miyamoto. Serving as the company's mascot and the eponymous protagonist of the series, Mario has appeared in over 200 video games since his creation. Depicted as a short, pudgy, Italian plumber who resides in the Mushroom Kingdom, his adventures generally center upon rescuing Princess Peach from the Koopa villain Bowser. His younger brother and sidekick is Luigi.`
-    );
+    // // Fill in the backstory field
+    // backstoryField.setText(
+    //   `Mario is a fictional character in the Mario video game franchise, owned by Nintendo and created by Japanese video game designer Shigeru Miyamoto. Serving as the company's mascot and the eponymous protagonist of the series, Mario has appeared in over 200 video games since his creation. Depicted as a short, pudgy, Italian plumber who resides in the Mushroom Kingdom, his adventures generally center upon rescuing Princess Peach from the Koopa villain Bowser. His younger brother and sidekick is Luigi.`
+    // );
 
-    // Fill in the traits field
-    traitsField.setText(
-      [
-        `Mario can use three basic three power-ups:`,
-        `  • the Super Mushroom, which causes Mario to grow larger`,
-        `  • the Fire Flower, which allows Mario to throw fireballs`,
-        `  • the Starman, which gives Mario temporary invincibility`,
-      ].join("\n")
-    );
+    // // Fill in the traits field
+    // traitsField.setText(
+    //   [
+    //     `Mario can use three basic three power-ups:`,
+    //     `  • the Super Mushroom, which causes Mario to grow larger`,
+    //     `  • the Fire Flower, which allows Mario to throw fireballs`,
+    //     `  • the Starman, which gives Mario temporary invincibility`,
+    //   ].join("\n")
+    // );
 
-    // Fill in the treasure field
-    treasureField.setText(["• Gold coins", "• Treasure chests"].join("\n"));
+    // // Fill in the treasure field
+    // treasureField.setText(["• Gold coins", "• Treasure chests"].join("\n"));
 
     // Serialize the PDFDocument to bytes (a Uint8Array)
     const pdfBytes = await pdfDoc.saveAsBase64();
     // console.log(pdfBytes);
 
-    const uri = FileSystem.documentDirectory + `dod.pdf`;
+    const uri = FileSystem.documentDirectory + `historiaclinic.pdf`;
     // console.log(`Writing to ${JSON.stringify(uri)} with text: ${wbout}`);
     FileSystem.writeAsStringAsync(uri, pdfBytes, {
       encoding: FileSystem.EncodingType.Base64,
