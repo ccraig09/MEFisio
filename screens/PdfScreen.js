@@ -1,28 +1,54 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, FlatList, Button } from "react-native";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import {
+  degrees,
+  PDFDocument,
+  rgb,
+  StandardFonts,
+  encodeToBase64,
+  LineCapStyle,
+} from "pdf-lib";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import fontkit from "@pdf-lib/fontkit";
-import Base64ArrayBuffer from "base64-arraybuffer";
-
-import { Buffer } from "buffer";
+import * as DocumentPicker from "expo-document-picker";
 
 const PdfScreen = ({ route, navigation }) => {
   const [pdfloaded, setPdfDoc] = useState();
+  // const [
+  //   inputPdfBytes,
+  //   catRidingUnicornBytes,
+  //   cmykBytes,
+  //   normalPdfBase64,
+  //   existingPdfBytes,
+  // ] = Promise.all([
+  //   fetchAsset("pdfs/with_update_sections.pdf"),
+  //   fetchAsset("images/cat_riding_unicorn_resized.jpg"),
+  //   fetchAsset("images/cmyk_colorspace.jpg"),
+  //   fetchAsset("pdfs/normal.pdf"),
+  //   fetchAsset("pdfs/with_annots.pdf"),
+  // ]);
 
   const chooseDoc = async () => {
-    FileSystem.downloadAsync(
-      "https://pdf-lib.js.org/assets/dod_character.pdf",
-      FileSystem.documentDirectory + "test.pdf"
-    )
-      .then(({ uri }) => {
-        console.log("Finished downloading to ", uri);
-        setPdfDoc(uri);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const response = await fetch(
+      `https://pdf-lib.js.org/assets/dod_character.pdf`
+    );
+    const blob = await response.blob();
+    // setPdfDoc(res.base64());
+    alert(blob);
+    // console.log(blob);
+    // return res.base64();
+
+    // FileSystem.downloadAsync(
+    //   "https://pdf-lib.js.org/assets/dod_character.pdf",
+    //   FileSystem.documentDirectory + "test.pdf"
+    // )
+    //   .then(({ uri }) => {
+    //     console.log("Finished downloading to ", uri);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   const marioForm = async () => {
@@ -59,21 +85,41 @@ const PdfScreen = ({ route, navigation }) => {
   };
 
   const fillForm = async () => {
-    // const formBytes = await fetch(pdfloaded).then((res) => readAsDataURL(res));
+    let docUri;
+    const pickDocument = async () => {
+      let result = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+        // copyToCacheDirectory: false,
+      });
+      // alert(result.uri);
+      // console.log(result);
+      // return result.uri;
+      console.log(result);
+      docUri = result.uri;
+    };
+    await pickDocument();
 
-    let your_bytes = Buffer.from(pdfloaded);
-    var bytes = new Uint8Array(your_bytes);
+    // const launch = async () => {
+    //   console.log("string s");
+    //   await FileSystem.readAsStringAsync(docUri).then((cUri) => {
+    //     console.log("curi?", cUri);
+    //   });
+    // };
+    // launch();
+    // const getInfo = await FileSystem.getInfoAsync(docUri);
+    // console.log("get info", getInfo);
+    const formPdfBytes = await FileSystem.readAsStringAsync(docUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
 
-    console.log("loaded----", bytes);
-    console.log("buffed----", your_bytes);
-    // const docu = Base64ArrayBuffer.encode();
+    // console.log("result!", formPdfBytes);
 
-    const pdfDoc = await PDFDocument.load(your_bytes);
-    console.log(pdfDoc.context.header.toString());
+    const pdfDoc = await PDFDocument.load(formPdfBytes);
+    // console.log(pdfDoc.context.header.toString());
 
     // Embed the Mario and emblem images
-    const marioImage = await pdfDoc.embedPng(marioImageBytes);
-    const emblemImage = await pdfDoc.embedPng(emblemImageBytes);
+    // const marioImage = await pdfDoc.embedPng(marioImageBytes);
+    // const emblemImage = await pdfDoc.embedPng(emblemImageBytes);
 
     // Get the form containing all the fields
     const form = pdfDoc.getForm();
@@ -93,8 +139,8 @@ const PdfScreen = ({ route, navigation }) => {
     const traitsField = form.getTextField("Feat+Traits");
     const treasureField = form.getTextField("Treasure");
 
-    const characterImageField = form.getButton("CHARACTER IMAGE");
-    const factionImageField = form.getTextField("Faction Symbol Image");
+    // const characterImageField = form.getButton("CHARACTER IMAGE");
+    // const factionImageField = form.getTextField("Faction Symbol Image");
 
     // Fill in the basic info fields
     nameField.setText("Mario");
@@ -106,7 +152,7 @@ const PdfScreen = ({ route, navigation }) => {
     hairField.setText("brown");
 
     // Fill the character image field with our Mario image
-    characterImageField.setImage(marioImage);
+    // characterImageField.setImage(marioImage);
 
     // Fill in the allies field
     alliesField.setText(
@@ -130,7 +176,7 @@ const PdfScreen = ({ route, navigation }) => {
     factionField.setText(`Mario's Emblem`);
 
     // Fill the faction image field with our emblem image
-    factionImageField.setImage(emblemImage);
+    // factionImageField.setImage(emblemImage);
 
     // Fill in the backstory field
     backstoryField.setText(
@@ -151,13 +197,21 @@ const PdfScreen = ({ route, navigation }) => {
     treasureField.setText(["• Gold coins", "• Treasure chests"].join("\n"));
 
     // Serialize the PDFDocument to bytes (a Uint8Array)
-    const pdfBytes = await pdfDoc.save();
+    const pdfBytes = await pdfDoc.saveAsBase64();
+    // console.log(pdfBytes);
+
+    const uri = FileSystem.documentDirectory + `dod.pdf`;
+    // console.log(`Writing to ${JSON.stringify(uri)} with text: ${wbout}`);
+    FileSystem.writeAsStringAsync(uri, pdfBytes, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    Sharing.shareAsync(uri);
   };
 
   const createDoc = async () => {
     console.log("getting started");
     const pdfDoc = await PDFDocument.create();
-    const marioUrl = "https://pdf-lib.js.org/assets/small_mario.png";
+    // const marioUrl = "https://pdf-lib.js.org/assets/small_mario.png";
 
     const page = pdfDoc.addPage([550, 750]);
 
@@ -190,7 +244,7 @@ const PdfScreen = ({ route, navigation }) => {
     });
     rocketField.select("Saturn IV");
 
-    const marioImage = await pdfDoc.embedPng(marioUrl);
+    // const marioImage = await pdfDoc.embedPng(marioUrl);
 
     page.drawText("Select your favorite gundams:", { x: 50, y: 440, size: 20 });
 

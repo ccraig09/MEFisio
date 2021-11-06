@@ -8,6 +8,8 @@ import {
   StatusBar,
 } from "react-native";
 import Animbutton from "../components/animbutton";
+import firebase from "../components/firebase";
+
 const jsonData = {
   slots: {
     slot1: "9:00am a 9:00am",
@@ -29,9 +31,30 @@ const SlotScreen = ({ route, navigation }) => {
   //   // console.log("try this", bookingDate.bookingDate.dateString);
   // }, []);
 
-  const bookSlot = (status, key, value) => {
-    const month = bookingDate.bookingDate.month;
-    const date = bookingDate.bookingDate.day;
+  const bookSlot = async (status, key, value) => {
+    const month = bookParam.bookingDate.month;
+    const date = bookParam.bookingDate.day;
+    const user = "12345678";
+    const uid = user;
+    let userDataJson = {};
+    if (status) userDataJson[key] = uid;
+    else userDataJson[key] = null;
+    try {
+      await firebase.firestore().collection("Reservations").doc("12").set(
+        {
+          User: uid,
+          Date: date,
+          Key: key,
+          Slot: value,
+          userDataJson,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      alert(e);
+      console.log(e);
+    }
     console.log(month, date, status, key, value);
   };
   const slots = jsonData.slots;

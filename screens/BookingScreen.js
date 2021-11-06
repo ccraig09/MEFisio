@@ -38,6 +38,11 @@ const BookingScreen = ({ navigation }) => {
         style={styles.calendar}
         hideExtraDays
         markedDates={{ [selected]: { selected: true } }}
+        markedDates={{
+          "2021-11-16": { selected: true, marked: true },
+          "2012-05-17": { marked: true },
+          "2021-11-17": { disabled: true },
+        }}
         theme={{
           selectedDayBackgroundColor: Colors.primary,
           todayTextColor: Colors.primary,
