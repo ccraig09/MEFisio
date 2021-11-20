@@ -12,11 +12,27 @@ import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import fontkit from "@pdf-lib/fontkit";
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 
 const PdfScreen = ({ route, navigation }) => {
   const [pdfloaded, setPdfDoc] = useState();
 
   const fillForm = async () => {
+    let picUri;
+    const takePhotoFromCamera = async () => {
+      console.log("opening Camara");
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 0.7,
+      });
+      console.log(result.uri);
+
+      picUri = result.uri;
+    };
+    await takePhotoFromCamera();
     let docUri;
     const pickDocument = async () => {
       let result = await DocumentPicker.getDocumentAsync({
@@ -30,46 +46,60 @@ const PdfScreen = ({ route, navigation }) => {
     const formPdfBytes = await FileSystem.readAsStringAsync(docUri, {
       encoding: FileSystem.EncodingType.Base64,
     });
+    const imageBytes = await FileSystem.readAsStringAsync(picUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    // const frontalAntesBytes = await
 
     const pdfDoc = await PDFDocument.load(formPdfBytes);
     // console.log(pdfDoc.context.header.toString());
 
     // Embed the Mario and emblem images
-    // const marioImage = await pdfDoc.embedPng(marioImageBytes);
-    // const emblemImage = await pdfDoc.embedPng(emblemImageBytes);
+
+    // const frontalAntes = await pdfDoc.embedPng(
+    //   "https://pdf-lib.js.org/assets/small_mario.png"
+    // );
+    // const emblemImage = await pdfDoc.embedPng('https://pdf-lib.js.org/assets/small_mario.png');
 
     // Get the form containing all the fields
     const form = pdfDoc.getForm();
 
+    const marioImage = await pdfDoc.embedJpg(imageBytes);
+
     // Get all fields in the PDF by their names
-    const nameField = form.getTextField("name");
-    const genderField = form.getTextField("gender");
-    const pesoField = form.getTextField("peso");
-    const motivoField = form.getTextField("motivo");
-    // const ageField = form.getTextField("Age");
-    // const heightField = form.getTextField("Height");
-    // const weightField = form.getTextField("Weight");
-    // const eyesField = form.getTextField("Eyes");
-    // const skinField = form.getTextField("Skin");
-    // const hairField = form.getTextField("Hair");
+    // const nameField = form.getTextField("Nombre");
+    // const genderField = form.getTextField("gender");
+    // const pesoField = form.getTextField("peso");
+    // const motivoField = form.getTextField("motivo");
+    const vistaFrontalAntes = form.getButton("vista frontal antes");
+    const vistaFrontalAntes = form
+      .getCheckBox("vista frontal antes")
+      // const ageField = form.getTextField("Age");
+      // const heightField = form.getTextField("Height");
+      // const weightField = form.getTextField("Weight");
+      // const eyesField = form.getTextField("Eyes");
+      // const skinField = form.getTextField("Skin");
+      // const hairField = form.getTextField("Hair");
 
-    // const alliesField = form.getTextField("Allies");
-    // const factionField = form.getTextField("FactionName");
-    // const backstoryField = form.getTextField("Backstory");
-    // const traitsField = form.getTextField("Feat+Traits");
-    // const treasureField = form.getTextField("Treasure");
+      // const alliesField = form.getTextField("Allies");
+      // const factionField = form.getTextField("FactionName");
+      // const backstoryField = form.getTextField("Backstory");
+      // const traitsField = form.getTextField("Feat+Traits");
+      // const treasureField = form.getTextField("Treasure");
 
-    // const characterImageField = form.getButton("CHARACTER IMAGE");
-    // const factionImageField = form.getTextField("Faction Symbol Image");
+      // const characterImageField = form.getButton("CHARACTER IMAGE");
+      // const factionImageField = form.getTextField("Faction Symbol Image");
 
-    // Fill in the basic info fields
+      // Fill in the basic info fields
 
-    nameField.setText("Carlos");
-    genderField.setText("Masculino");
-    pesoField.setText("192");
-    motivoField.setText(
-      "el motivo por este visito es para probar la applicacion y blah blah estoy probando texto largo para llenar espacio."
-    );
+      // nameField.setText("Carlos");
+      // genderField.setText("Masculino");
+      // pesoField.setText("192");
+      // motivoField.setText(
+      //   "el motivo por este visito es para probar la applicacion y blah blah estoy probando texto largo para llenar espacio."
+      // );
+      .vistaFrontalAntes.setImage(marioImage);
     // ageField.setText("24 years");
     // heightField.setText(`5' 1"`);
     // weightField.setText("196 lbs");
