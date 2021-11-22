@@ -68,38 +68,56 @@ const PdfScreen = ({ route, navigation }) => {
     const marioImage = await pdfDoc.embedJpg(imageBytes);
 
     // Get all fields in the PDF by their names
-    // const nameField = form.getTextField("Nombre");
-    // const genderField = form.getTextField("gender");
-    // const pesoField = form.getTextField("peso");
-    // const motivoField = form.getTextField("motivo");
+    // page 1
+    const nameField = form.getTextField("Nombre");
+    const DomicilioField = form.getTextField("Domicilio");
+    const telefonoField = form.getTextField("telefono");
+    const ocupacionField = form.getTextField("ocupacion");
+    const sexoField = form.getTextField("sexo");
+    const edadField = form.getTextField("edad");
+    const ecivilField = form.getTextField("ecivil");
+    const terapeutaField = form.getTextField("terapeuta");
+    const expedienteField = form.getTextField("expediente");
+    const dayField = form.getTextField("day");
+    const monthField = form.getTextField("month");
+    const yearField = form.getTextField("year");
+    const pesoField = form.getTextField("peso");
+    const tallaField = form.getTextField("talla");
+    const estaturaField = form.getTextField("estatura");
+    const imcField = form.getTextField("imc");
+    const motivoField = form.getTextField("motivo");
+    const tratamientoField = form.getTextField("tratamiento");
+    const diabetessiField = form.getCheckBox("diabetes si");
+    const diabetesnoField = form.getCheckBox("diabetes no");
+    const diabetesespField = form.getTextField("diabetes esp");
+    const diabetessiField = form.getCheckBox("diabetes si");
     const vistaFrontalAntes = form.getButton("vista frontal antes");
-    const vistaFrontalAntes = form
-      .getCheckBox("vista frontal antes")
-      // const ageField = form.getTextField("Age");
-      // const heightField = form.getTextField("Height");
-      // const weightField = form.getTextField("Weight");
-      // const eyesField = form.getTextField("Eyes");
-      // const skinField = form.getTextField("Skin");
-      // const hairField = form.getTextField("Hair");
 
-      // const alliesField = form.getTextField("Allies");
-      // const factionField = form.getTextField("FactionName");
-      // const backstoryField = form.getTextField("Backstory");
-      // const traitsField = form.getTextField("Feat+Traits");
-      // const treasureField = form.getTextField("Treasure");
+    // const ageField = form.getTextField("Age");
+    // const heightField = form.getTextField("Height");
+    // const weightField = form.getTextField("Weight");
+    // const eyesField = form.getTextField("Eyes");
+    // const skinField = form.getTextField("Skin");
+    // const hairField = form.getTextField("Hair");
 
-      // const characterImageField = form.getButton("CHARACTER IMAGE");
-      // const factionImageField = form.getTextField("Faction Symbol Image");
+    // const alliesField = form.getTextField("Allies");
+    // const factionField = form.getTextField("FactionName");
+    // const backstoryField = form.getTextField("Backstory");
+    // const traitsField = form.getTextField("Feat+Traits");
+    // const treasureField = form.getTextField("Treasure");
 
-      // Fill in the basic info fields
+    // const characterImageField = form.getButton("CHARACTER IMAGE");
+    // const factionImageField = form.getTextField("Faction Symbol Image");
 
-      // nameField.setText("Carlos");
-      // genderField.setText("Masculino");
-      // pesoField.setText("192");
-      // motivoField.setText(
-      //   "el motivo por este visito es para probar la applicacion y blah blah estoy probando texto largo para llenar espacio."
-      // );
-      .vistaFrontalAntes.setImage(marioImage);
+    // Fill in the basic info fields
+
+    nameField.setText("Carlos");
+    genderField.setText("Masculino");
+    pesoField.setText("192");
+    motivoField.setText(
+      "el motivo por este visito es para probar la applicacion y blah blah estoy probando texto largo para llenar espacio."
+    );
+    vistaFrontalAntes.setImage(marioImage);
     // ageField.setText("24 years");
     // heightField.setText(`5' 1"`);
     // weightField.setText("196 lbs");
