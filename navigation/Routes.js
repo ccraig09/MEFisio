@@ -5,7 +5,7 @@ import firebase from "../components/firebase";
 import { AuthContext } from "./AuthProvider";
 import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 
-// import AuthStack from "./AuthStack";
+import AuthStack from "./AuthStack";
 import AppStack from "./AppStack";
 AwesomeIcon.loadFont();
 
@@ -27,9 +27,9 @@ const Routes = () => {
 
   return (
     <NavigationContainer>
-      {/* {user ? <AppStack /> : <AuthStack />} */}
+      {user ? <AppStack /> : <AuthStack />}
       {/* <AuthStack /> */}
-      <AppStack />
+      {/* <AppStack /> */}
     </NavigationContainer>
   );
 };

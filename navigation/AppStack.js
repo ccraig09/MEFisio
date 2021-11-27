@@ -5,7 +5,6 @@ import Details from "../screens/DetailsScreen";
 import Pdf from "../screens/PdfScreen";
 import Booking from "../screens/BookingScreen";
 import Slot from "../screens/SlotScreen";
-// import Login from '../src/screens/login';
 // import Signup from '../src/screens/signup';
 // import Preguntas from '../src/screens/preguntas';
 // import Wheels from '../src/screens/wheels';
@@ -14,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 const AppStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Home"
         component={Home}
@@ -25,6 +24,7 @@ const AppStack = () => {
           headerTintColor: "#25a2d5",
         }}
       />
+
       <Stack.Screen
         name="Details"
         component={Details}

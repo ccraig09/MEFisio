@@ -232,6 +232,19 @@ export const AuthProvider = ({ children, navigation }) => {
             console.log(e);
           }
         },
+        logout: async () => {
+          try {
+            await firebase.auth().signOut();
+          } catch (e) {
+            console.log(e);
+          }
+          try {
+          } catch (e) {
+            const errorMes = firebaseErrors[e.code];
+            alert(errorMes);
+            console.log(errorMes);
+          }
+        },
       }}
     >
       {children}

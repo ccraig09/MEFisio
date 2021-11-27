@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, Text, StyleSheet, FlatList, Button, Alert } from "react-native";
 import {
   degrees,
   PDFDocument,
@@ -13,8 +13,11 @@ import * as FileSystem from "expo-file-system";
 import fontkit from "@pdf-lib/fontkit";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+import { AuthContext } from "../navigation/AuthProvider";
 
 const PdfScreen = ({ route, navigation }) => {
+  const { user, logout } = useContext(AuthContext);
+
   const [pdfloaded, setPdfDoc] = useState();
   const [results, setResults] = useState({
     diabetessi: "check",
@@ -176,17 +179,17 @@ const PdfScreen = ({ route, navigation }) => {
     }
     const accidentesespField = form.getTextField("accidentes esp");
     accidentesespField.setText(results.accidentesesp);
-    //
-    const cardiopatiassiCheck = form.getCheckBox("cardiopatias si");
-    {
-      results.cardiopatiassi === "check" && cardiopatiassiCheck.check();
-    }
-    const cardiopatiasnoCheck = form.getCheckBox("cardiopatias no");
-    {
-      results.cardiopatiasno === "check" && cardiopatiasnoCheck.check();
-    }
-    const cardiopatiasespField = form.getTextField("cardiopatias esp");
-    cardiopatiasespField.setText(results.cardiopatiasesp);
+    // //
+    // const cardiopatiassiCheck = form.getCheckBox("cardiopatias si");
+    // {
+    //   results.cardiopatiassi === "check" && cardiopatiassiCheck.check();
+    // }
+    // const cardiopatiasnoCheck = form.getCheckBox("cardiopatias no");
+    // {
+    //   results.cardiopatiasno === "check" && cardiopatiasnoCheck.check();
+    // }
+    // const cardiopatiasespField = form.getTextField("cardiopatias esp");
+    // cardiopatiasespField.setText(results.cardiopatiasesp);
     //
     const cardiopatiassiCheck = form.getCheckBox("cardiopatias si");
     {
@@ -443,6 +446,24 @@ const PdfScreen = ({ route, navigation }) => {
         title="create a doc"
         onPress={() => {
           createDoc();
+        }}
+      />
+      <Button
+        title="Cerrar sesión"
+        onPress={() => {
+          Alert.alert("Cerrar sesión?", "", [
+            {
+              text: "No",
+              style: "default",
+            },
+            {
+              text: "Si",
+              style: "destructive",
+              onPress: () => {
+                logout();
+              },
+            },
+          ]);
         }}
       />
     </View>
