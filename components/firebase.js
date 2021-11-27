@@ -1,10 +1,10 @@
-import * as firebase from "firebase";
+// import * as firebase from "firebase";
 // import * as firebase from "firebase/app";
-// import firebase from "firebase/app";
+import firebase from "firebase/app";
 
 import "firebase/auth";
-// import "firebase/firestore";
-// import "firebase/storage";
+import "firebase/firestore";
+import "firebase/storage";
 const firebaseConfig = {
   apiKey: "AIzaSyC3zeeazuRoCN02oGf36ILege3uV1YdSjk",
   authDomain: "mefisio.firebaseapp.com",

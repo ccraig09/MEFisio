@@ -5,6 +5,7 @@ import {
   TextInput,
   Button,
   StyleSheet,
+  Alert,
   TouchableOpacity,
   Platform,
   StatusBar,
@@ -21,7 +22,7 @@ import * as Animatable from "react-native-animatable";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 
 const VerifyScreen = ({ route }) => {
-  const { verificationId } = route.params;
+  const { verificationId, fName, lName } = route.params;
   const recaptchaVerifier = useRef(null);
   const [verificationCode, setVerificationCode] = useState();
 
@@ -36,8 +37,23 @@ const VerifyScreen = ({ route }) => {
       .auth()
       .signInWithCredential(credential)
       .then((result) => {
+        firebase
+          .firestore()
+          .collection("Members")
+          .doc(firebase.auth().currentUser.uid)
+          .set(
+            {
+              userId: firebase.auth().currentUser.uid,
+              FirstName: fName,
+              LastName: lName,
+
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            },
+            { merge: true }
+          );
+
         // Do something with the results here
-        console.log(result);
+        console.log(result.additionalUserInfo.isNewUser);
       });
   };
 
@@ -66,12 +82,12 @@ const VerifyScreen = ({ route }) => {
             pinCount={6}
             editable={!!verificationId}
             // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-            // onCodeChanged = {code => { this.setState({code})}}
+            onCodeChanged={(code) => setVerificationCode(code)}
             autoFocusOnLoad
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
             onCodeFilled={(code) => {
-              setVerificationCode(code);
+              // setVerificationCode(code);
               console.log(`Code is ${code}, you are good to go!`);
             }}
           />

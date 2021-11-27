@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  Alert,
   StatusBar,
 } from "react-native";
 import {
@@ -19,6 +20,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Colors";
 import * as Animatable from "react-native-animatable";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
 
 const LoginScreen = ({ navigation }) => {
   const recaptchaVerifier = useRef(null);
@@ -26,6 +29,10 @@ const LoginScreen = ({ navigation }) => {
   const [formattedValue, setFormattedValue] = useState("");
   const [verificationId, setVerificationId] = useState();
   const [verificationCode, setVerificationCode] = useState();
+  const [fName, setFName] = useState();
+  const [lName, setLName] = useState();
+  const [isValidName, setIsValidName] = useState(true);
+
   // const phoneInput = useRef < PhoneInput > null;
 
   // const [message, showMessage] = React.useState(
@@ -37,14 +44,40 @@ const LoginScreen = ({ navigation }) => {
   // );
   const attemptInvisibleVerification = false;
 
+  const handleNameChange = (val) => {
+    if (val.trim().length >= 2) {
+      setFName(val);
+      setIsValidName(true);
+    } else {
+      setFName(val);
+      setIsValidName(false);
+    }
+  };
+
+  const handleValidName = (val) => {
+    if (val.trim().length >= 2) {
+      setIsValidName(true);
+    } else {
+      setIsValidName(false);
+    }
+  };
+
   const sendVerification = () => {
-    console.log(phoneNumber);
-    const phoneProvider = new firebase.auth.PhoneAuthProvider();
-    phoneProvider
-      .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
-      .then((verificationId) =>
-        navigation.navigate("Verify", { verificationId: verificationId })
-      );
+    if (isValidName === false) {
+      Alert.alert("Incompleto!", "Por favor revise los datos");
+    } else {
+      console.log(phoneNumber);
+      const phoneProvider = new firebase.auth.PhoneAuthProvider();
+      phoneProvider
+        .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
+        .then((verificationId) =>
+          navigation.navigate("Verify", {
+            verificationId: verificationId,
+            fName: fName,
+            lName: lName,
+          })
+        );
+    }
   };
 
   // const confirmCode = () => {
@@ -77,6 +110,40 @@ const LoginScreen = ({ navigation }) => {
             firebaseConfig={firebase.app().options}
             attemptInvisibleVerification={attemptInvisibleVerification}
           />
+          <Text style={styles.text_footer}>Nombre</Text>
+          <View style={styles.action}>
+            <FontAwesome name="user-o" color={"#05375a"} size={20} />
+            <TextInput
+              placeholder="Tu nombre"
+              placeholderTextColor="#666666"
+              style={styles.textInput}
+              value={fName}
+              onChangeText={(val) => handleNameChange(val)}
+              autoCorrect={false}
+              autoCapitalize="words"
+              onEndEditing={(e) => handleValidName(e.nativeEvent.text)}
+            />
+          </View>
+          {isValidName ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMsg}>
+                Por Favor usar un nombre valido
+              </Text>
+            </Animatable.View>
+          )}
+          <Text style={[styles.text_footer, { marginTop: 25 }]}>Apellido</Text>
+          <View style={[styles.action, { marginBottom: 20 }]}>
+            <FontAwesome name="user-o" color={"#05375a"} size={20} />
+            <TextInput
+              placeholder="Tu Apellido"
+              placeholderTextColor="#666666"
+              style={styles.textInput}
+              value={lName}
+              onChangeText={(val) => setLName(val)}
+              autoCorrect={false}
+              autoCapitalize="words"
+            />
+          </View>
           <Text style={styles.text_footer}>Teléfono</Text>
           <PhoneInput
             // ref={phoneInput}
