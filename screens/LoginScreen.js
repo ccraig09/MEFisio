@@ -19,7 +19,6 @@ import PhoneInput from "react-native-phone-number-input";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Colors";
 import * as Animatable from "react-native-animatable";
-import OTPInputView from "@twotalltotems/react-native-otp-input";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 
@@ -75,6 +74,7 @@ const LoginScreen = ({ navigation }) => {
             verificationId: verificationId,
             fName: fName,
             lName: lName,
+            cell: phoneNumber,
           })
         );
     }

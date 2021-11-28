@@ -232,6 +232,38 @@ export const AuthProvider = ({ children, navigation }) => {
             console.log(e);
           }
         },
+        phoneLogin: async (credential, fName, lName, cell) => {
+          try {
+            firebase
+              .auth()
+              .signInWithCredential(credential)
+              .then(() => {
+                firebase
+                  .firestore()
+                  .collection("Members")
+                  .doc(firebase.auth().currentUser.uid)
+                  .set(
+                    {
+                      userId: firebase.auth().currentUser.uid,
+                      FirstName: fName,
+                      LastName: lName,
+                      Cell: cell,
+
+                      createdAt:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                    },
+                    { merge: true }
+                  );
+
+                // Do something with the results here
+                // console.log(result.additionalUserInfo.isNewUser);
+              });
+          } catch (e) {
+            const errorMes = firebaseErrors[e.code];
+            alert(errorMes);
+            console.log(e);
+          }
+        },
         logout: async () => {
           try {
             await firebase.auth().signOut();

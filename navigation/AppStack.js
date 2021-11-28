@@ -18,7 +18,7 @@ const AppStack = () => {
         name="Home"
         component={Home}
         options={{
-          headerShown: true,
+          headerShown: false,
           animation: "fade",
           title: "Servicios",
           headerTintColor: "#25a2d5",

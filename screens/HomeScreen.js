@@ -1,8 +1,60 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import { StyleSheet, FlatList, Button, View } from "react-native";
+import { StyleSheet, FlatList, Button, View, Text } from "react-native";
 import CategoryItem from "../components/CategoryItem";
+import { useFocusEffect } from "@react-navigation/native";
+import firebase from "../components/firebase";
+import Colors from "../constants/Colors";
+import { AuthContext } from "../navigation/AuthProvider";
+
+const currentHour = new Date().getHours();
+
+const greetingMessage =
+  currentHour >= 4 && currentHour < 12 // after 4:00AM and before 12:00PM
+    ? "Buenos Días"
+    : currentHour >= 12 && currentHour <= 17 // after 12:00PM and before 6:00pm
+    ? "Buenas Tardes"
+    : currentHour > 17 || currentHour < 4 // after 5:59pm or before 4:00AM (to accommodate night owls)
+    ? "Buenas Noches" // if for some reason the calculation didn't work
+    : "Bienvenido";
 
 export default function HomeScreen({ navigation }) {
+  const { user } = useContext(AuthContext);
+
+  const [userInfo, setUserInfo] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // registerForPushNotificationsAsync().then((token) => {
+      //   setExpoPushToken(token);
+      //   addToken(token);
+      // });
+      // console.log("loading home and user", user);
+      const fetchMemberDetails = async () => {
+        try {
+          const list = [];
+          await firebase
+            .firestore()
+            .collection("Members")
+            .doc(user.uid)
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                console.log("Document data:", doc.data());
+                setUserInfo(doc.data());
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+              }
+            });
+        } catch (e) {
+          console.log(e);
+        }
+      };
+
+      fetchMemberDetails();
+    }, [])
+  );
+
   const data = [
     {
       key: "1",
@@ -49,6 +101,10 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View>
+      <View style={styles.displayName}>
+        <Text style={styles.subtitle}>{greetingMessage}, </Text>
+        <Text style={styles.hello}>{userInfo.FirstName} </Text>
+      </View>
       <Button
         title=" go to pdf"
         onPress={() => {
@@ -90,5 +146,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f3f5",
     alignItems: "center",
     justifyContent: "center",
+  },
+  displayName: {
+    marginTop: 50,
+    padding: 10,
+    marginBottom: 25,
+    alignItems: "flex-start",
+    // marginTop: 20,
+    marginLeft: 10,
+    width: "45%",
+  },
+  subtitle: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  hello: {
+    flexWrap: "wrap",
+    fontWeight: "bold",
+    color: Colors.primary,
+    fontSize: 20,
   },
 });

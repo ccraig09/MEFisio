@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import {
   Text,
   View,
@@ -15,14 +15,16 @@ import {
   FirebaseRecaptchaBanner,
 } from "expo-firebase-recaptcha";
 import firebase from "../components/firebase";
-import PhoneInput from "react-native-phone-number-input";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Colors";
 import * as Animatable from "react-native-animatable";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
+import { AuthContext } from "../navigation/AuthProvider";
 
 const VerifyScreen = ({ route }) => {
-  const { verificationId, fName, lName } = route.params;
+  const { phoneLogin } = useContext(AuthContext);
+
+  const { verificationId, fName, lName, cell } = route.params;
   const recaptchaVerifier = useRef(null);
   const [verificationCode, setVerificationCode] = useState();
 
@@ -33,28 +35,7 @@ const VerifyScreen = ({ route }) => {
       verificationId,
       verificationCode
     );
-    firebase
-      .auth()
-      .signInWithCredential(credential)
-      .then((result) => {
-        firebase
-          .firestore()
-          .collection("Members")
-          .doc(firebase.auth().currentUser.uid)
-          .set(
-            {
-              userId: firebase.auth().currentUser.uid,
-              FirstName: fName,
-              LastName: lName,
-
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            },
-            { merge: true }
-          );
-
-        // Do something with the results here
-        console.log(result.additionalUserInfo.isNewUser);
-      });
+    phoneLogin(credential, fName, lName, cell);
   };
 
   return (
