@@ -30,6 +30,7 @@ const LoginScreen = ({ navigation }) => {
   const [verificationCode, setVerificationCode] = useState();
   const [fName, setFName] = useState();
   const [lName, setLName] = useState();
+  const [age, setAge] = useState();
   const [isValidName, setIsValidName] = useState(true);
 
   // const phoneInput = useRef < PhoneInput > null;
@@ -74,6 +75,7 @@ const LoginScreen = ({ navigation }) => {
             verificationId: verificationId,
             fName: fName,
             lName: lName,
+            age: age,
             cell: phoneNumber,
           })
         );
@@ -132,7 +134,7 @@ const LoginScreen = ({ navigation }) => {
             </Animatable.View>
           )}
           <Text style={[styles.text_footer, { marginTop: 25 }]}>Apellido</Text>
-          <View style={[styles.action, { marginBottom: 20 }]}>
+          <View style={styles.action}>
             <FontAwesome name="user-o" color={"#05375a"} size={20} />
             <TextInput
               placeholder="Tu Apellido"
@@ -142,6 +144,19 @@ const LoginScreen = ({ navigation }) => {
               onChangeText={(val) => setLName(val)}
               autoCorrect={false}
               autoCapitalize="words"
+            />
+          </View>
+          <Text style={[styles.text_footer, { marginTop: 25 }]}>Edad</Text>
+          <View style={[styles.action, { marginBottom: 20 }]}>
+            <FontAwesome name="user-o" color={"#05375a"} size={20} />
+            <TextInput
+              placeholder="Edad"
+              placeholderTextColor="#666666"
+              style={styles.textInput}
+              value={age}
+              onChangeText={(val) => setAge(val)}
+              autoCorrect={false}
+              keyboardType={"numeric"}
             />
           </View>
           <Text style={styles.text_footer}>Teléfono</Text>

@@ -24,7 +24,7 @@ import { AuthContext } from "../navigation/AuthProvider";
 const VerifyScreen = ({ route }) => {
   const { phoneLogin } = useContext(AuthContext);
 
-  const { verificationId, fName, lName, cell } = route.params;
+  const { verificationId, fName, lName, age, cell } = route.params;
   const recaptchaVerifier = useRef(null);
   const [verificationCode, setVerificationCode] = useState();
 
@@ -35,7 +35,7 @@ const VerifyScreen = ({ route }) => {
       verificationId,
       verificationCode
     );
-    phoneLogin(credential, fName, lName, cell);
+    phoneLogin(credential, fName, lName, age, cell);
   };
 
   return (

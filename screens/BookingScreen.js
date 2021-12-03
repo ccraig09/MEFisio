@@ -18,7 +18,7 @@ const BookingScreen = ({ navigation }) => {
   const [selected, setSelected] = useState();
 
   const onDayPress = (day) => {
-    alert(day);
+    console.log("print day", day);
     setSelected(day.dateString);
     navigation.navigate("Slot", { bookingDate: day });
   };

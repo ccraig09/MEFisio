@@ -13,7 +13,7 @@ import firebase from "../components/firebase";
 const jsonData = {
   slots: {
     slot1: "9:00am a 9:00am",
-    slot2: "10:00am a 10:00am",
+    slot2: "10:00am a 11:00am",
     slot3: "11:00am a 12:00am",
     slot4: "15:00am a 16:00am",
     slot5: "17:00am a 18:00am",
@@ -33,20 +33,20 @@ const SlotScreen = ({ route, navigation }) => {
 
   const bookSlot = async (status, key, value) => {
     const month = bookParam.bookingDate.month;
-    const date = bookParam.bookingDate.day;
+    const date = bookParam.bookingDate.dateString;
     const user = "12345678";
     const uid = user;
     let userDataJson = {};
     if (status) userDataJson[key] = uid;
     else userDataJson[key] = null;
     try {
-      await firebase.firestore().collection("Reservations").doc("12").set(
+      await firebase.firestore().collection("Reservations").doc("Mayra").set(
         {
           User: uid,
           Date: date,
           Key: key,
           Slot: value,
-          userDataJson,
+          // userDataJson,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         },
         { merge: true }

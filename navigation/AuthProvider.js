@@ -232,7 +232,7 @@ export const AuthProvider = ({ children, navigation }) => {
             console.log(e);
           }
         },
-        phoneLogin: async (credential, fName, lName, cell) => {
+        phoneLogin: async (credential, fName, lName, age, cell) => {
           try {
             firebase
               .auth()
@@ -247,6 +247,7 @@ export const AuthProvider = ({ children, navigation }) => {
                       userId: firebase.auth().currentUser.uid,
                       FirstName: fName,
                       LastName: lName,
+                      Age: age,
                       Cell: cell,
 
                       createdAt:

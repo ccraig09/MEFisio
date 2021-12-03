@@ -22,7 +22,7 @@ const DetailsScreen = ({ route, navigation }) => {
       description={service.subDetail}
       info={service.info}
       onVideoClick={() => {
-        navigation.navigate("booking");
+        navigation.navigate("Select");
       }}
     />
   );
