@@ -8,6 +8,7 @@ export default class Animbutton extends Component {
       status: false,
     };
   }
+
   _onPress() {
     this.props._onPress(!this.state.status);
     this.setState({ status: !this.state.status });
@@ -46,7 +47,13 @@ export default class Animbutton extends Component {
   }
   render() {
     return (
-      <TouchableWithoutFeedback onPress={() => this._onPress()}>
+      <TouchableWithoutFeedback
+        onPress={() => this._onPress()}
+        // disabled={
+        //   this.props.slots.filter((entry) => entry.userDataJson) ===
+        //   this.props.data
+        // }
+      >
         <Animatable.View
           ref="view"
           style={{
