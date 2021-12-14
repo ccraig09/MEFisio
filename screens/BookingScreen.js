@@ -14,13 +14,14 @@ import Colors from "../constants/Colors";
 
 let screenHeight = Dimensions.get("window").height;
 
-const BookingScreen = ({ navigation }) => {
+const BookingScreen = ({ route, navigation }) => {
   const [selected, setSelected] = useState();
+  const helper = route.params;
 
   const onDayPress = (day) => {
     console.log("print day", day);
     setSelected(day.dateString);
-    navigation.navigate("Slot", { bookingDate: day });
+    navigation.navigate("Slot", { bookingDate: day, helper: helper });
   };
 
   return (

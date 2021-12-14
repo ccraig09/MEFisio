@@ -265,9 +265,9 @@ export const AuthProvider = ({ children, navigation }) => {
             console.log(e);
           }
         },
-        reserveSlot: async (bookingData, bookParam, user) => {
+        reserveSlot: async (bookingData, bookParam, user, slots, helper) => {
           const status = bookingData.status;
-          const key = bookingData.k;
+          const key = bookingData.k.slot;
           const value = bookingData.slots;
           const month = bookParam.bookingDate.month.toString();
           const year = bookParam.bookingDate.year.toString();
@@ -278,21 +278,16 @@ export const AuthProvider = ({ children, navigation }) => {
           if (status) userDataJson[key] = uid;
           else userDataJson[key] = null;
           try {
-            await firebase
-              .firestore()
-              .collection(`${month}_${year}`)
-              .doc(date)
-              .set(
-                {
-                  // User: uid,
-                  // Date: date,
-                  // Key: key,
-                  // Slot: value,
-                  userDataJson,
-                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                },
-                { merge: true }
-              );
+            await firebase.firestore().collection(`${helper}`).doc(date).set(
+              {
+                // User: uid,
+                // Date: date,
+                // Key: key,
+                // Slot: value,
+                userDataJson,
+              },
+              { merge: true }
+            );
           } catch (e) {
             alert(e);
             console.log(e);

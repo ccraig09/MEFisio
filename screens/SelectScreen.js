@@ -41,7 +41,7 @@ const SelectScreen = ({ route, navigation }) => {
             size={150}
             source={require("../assets/Mayyra.png")}
             onPress={() => {
-              navigation.navigate("booking");
+              navigation.navigate("booking", { helper: "Mayra" });
             }}
           />
           <Text style={styles.nameText}>Mayra</Text>
@@ -53,7 +53,7 @@ const SelectScreen = ({ route, navigation }) => {
             size={150}
             source={require("../assets/Emmm.png")}
             onPress={() => {
-              navigation.navigate("booking");
+              navigation.navigate("booking", { helper: "Emma" });
             }}
           />
           <Text style={styles.nameText}>Emma</Text>
