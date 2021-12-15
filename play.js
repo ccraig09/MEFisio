@@ -81,4 +81,20 @@ let carsProperties = cars.map((car) => {
 //     car["size"] = "small";
 //   }
 // });
-console.log(carsProperties);
+const nextDate = [
+  "2021-06-28",
+  "2021-06-29",
+  "2021-07-04",
+  "2021-07-5",
+  "2021-09-06",
+  "2021-08-05",
+];
+
+let mark = {};
+
+nextDate.forEach((day) => {
+  mark[day] = {
+    marked: true,
+  };
+});
+console.log(mark);

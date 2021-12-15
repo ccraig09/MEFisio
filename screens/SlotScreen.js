@@ -108,9 +108,6 @@ const SlotScreen = ({ route, navigation }) => {
       };
 
       fetchSlots();
-
-      // const mappedSlots = Object.keys(taken.userDataJson);
-      // console.log("slots token", mappedSlots);
     }, [])
   );
 
