@@ -232,7 +232,7 @@ export const AuthProvider = ({ children, navigation }) => {
             console.log(e);
           }
         },
-        phoneLogin: async (credential, fName, lName, age, cell) => {
+        phoneRegister: async (credential, fName, lName, age, cell) => {
           try {
             firebase
               .auth()
@@ -265,6 +265,105 @@ export const AuthProvider = ({ children, navigation }) => {
             console.log(e);
           }
         },
+        phoneLogin: async (credential) => {
+          try {
+            firebase.auth().signInWithCredential(credential);
+          } catch (e) {
+            const errorMes = firebaseErrors[e.code];
+            alert(errorMes);
+            console.log(e);
+          }
+        },
+        sendNotification: async (
+          userInfo,
+          bookingData,
+          bookParam,
+          helper,
+          type
+        ) => {
+          const time = bookingData.k.slot;
+          const date = bookParam.bookingDate.dateString;
+          const Name = userInfo.FirstName;
+          const Cell = userInfo.Cell;
+          const Age = userInfo.Age;
+          const userId = userInfo.userId;
+          console.log(Name, Cell, Age, userId);
+          // let array = {};
+          // array[date] = [
+          //   {
+          //     Name: Name,
+          //     Cell: Cell,
+          //     Age: Age,
+          //     userId: userId,
+          //     Time: time,
+          //     Type: type,
+          //     read: false,
+          //   },
+          // ];
+          // at beginning of script
+          // let array = {};
+
+          // // later, when you want to add to it
+          // if (!array[date]) {
+          //   array[date] = [];
+          // }
+          // array[date].push({
+          //   Name: Name,
+          //   Cell: Cell,
+          //   Age: Age,
+          //   userId: userId,
+          //   Time: time,
+          //   Type: type,
+          //   read: false,
+          // });
+
+          // array({
+          //   Name: Name,
+          //   Cell: Cell,
+          //   Age: Age,
+          //   userId: userId,
+          //   Time: time,
+          //   Type: type,
+          //   read: false,
+          // });
+
+          // try {
+          //   await firebase
+          //     .firestore()
+          //     .collection("Notifications")
+          //     .doc(`${helper}`)
+          //     .set(
+          //       array,
+
+          //       { merge: true }
+          //     );
+          // } catch (e) {
+          //   alert(e);
+          //   console.log(e);
+          // }
+          let array = {};
+          // array[date] = [];
+          try {
+            await firebase
+              .firestore()
+              .collection("Notifications")
+              .doc(`${helper}`)
+              .update({
+                [date]: firebase.firestore.FieldValue.arrayUnion({
+                  Name: Name,
+                  Cell: Cell,
+                  Age: Age,
+                  userId: userId,
+                  Time: time,
+                  Type: type,
+                  read: false,
+                }),
+              });
+          } catch (e) {
+            alert(e);
+            console.log(e);
+          }
+        },
         reserveSlot: async (bookingData, bookParam, user, slots, helper) => {
           const status = bookingData.status;
           const key = bookingData.k.slot;
@@ -273,6 +372,17 @@ export const AuthProvider = ({ children, navigation }) => {
           const year = bookParam.bookingDate.year.toString();
           const date = bookParam.bookingDate.dateString;
 
+          // const array = {
+          //   date: [
+          //     {
+          //       name: "loso",
+          //       time: key,
+          //       type: "somethings blah",
+          //       userId: firebase.auth().currentUser.uid,
+          //     },
+          //   ],
+          // };
+
           const uid = user.uid;
           let userDataJson = {};
           if (status) userDataJson[key] = uid;
@@ -280,10 +390,15 @@ export const AuthProvider = ({ children, navigation }) => {
           try {
             await firebase.firestore().collection(`${helper}`).doc(date).set(
               {
-                // User: uid,
-                // Date: date,
-                // Key: key,
-                // Slot: value,
+                // things,
+
+                // array,
+
+                // {
+                //   // User: uid,
+                //   // Date: date,
+                //   // Key: key,
+                //   // Slot: value,
                 userDataJson,
               },
               { merge: true }
@@ -292,7 +407,7 @@ export const AuthProvider = ({ children, navigation }) => {
             alert(e);
             console.log(e);
           }
-          console.log(month, date, status, key, value);
+          // console.log(month, date, status, key, value);
         },
         logout: async () => {
           try {

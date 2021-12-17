@@ -71,6 +71,7 @@ let carsProperties = cars.map((car) => {
   // }
   return properties;
 });
+console.log(test);
 
 // cars.forEach((car) => {
 //   car["size"] = "large";
@@ -97,4 +98,4 @@ nextDate.forEach((day) => {
     marked: true,
   };
 });
-console.log(mark);
+// console.log(mark);

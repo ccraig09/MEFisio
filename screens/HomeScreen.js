@@ -130,6 +130,9 @@ export default function HomeScreen({ navigation }) {
             onClassClick={() => {
               navigation.navigate("Details", {
                 service: itemData.item,
+                type: itemData.item.Subtitle,
+                userInfo: userInfo,
+
                 // classes: data,
               });
             }}

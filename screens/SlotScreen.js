@@ -52,7 +52,7 @@ let slots = [
 ];
 
 const SlotScreen = ({ route, navigation }) => {
-  const { reserveSlot, user } = useContext(AuthContext);
+  const { reserveSlot, user, sendNotification } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState();
   const [bookingDate, setBookingDate] = useState();
@@ -60,7 +60,8 @@ const SlotScreen = ({ route, navigation }) => {
   const [taken, setTaken] = useState([]);
   const bookParam = route.params;
   const helper = route.params.helper;
-  console.log(helper);
+  const userInfo = route.params.userInfo;
+  const type = route.params.type;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -92,7 +93,7 @@ const SlotScreen = ({ route, navigation }) => {
                     ),
                 }));
 
-                console.log("these are the matches", result);
+                // console.log("these are the matches", result);
 
                 setTaken(result);
               } else {
@@ -112,20 +113,31 @@ const SlotScreen = ({ route, navigation }) => {
   );
 
   const slotHandler = () => {
-    console.log("we gogt data?", bookingData);
+    console.log("we gogt user data? data?", userInfo);
     Alert.alert(`Confirmar hora por `, `${bookingData.slots}?`, [
       {
         text: "No",
-        style: "default",
+        style: "destructive",
       },
       {
         text: "Si",
-        style: "destructive",
+        style: "default",
         onPress: () => {
-          reserveSlot(bookingData, bookParam, user, slots, helper.helper);
+          confirmHandler(bookingData, bookParam, user, slots, helper.helper);
         },
       },
     ]);
+  };
+
+  const confirmHandler = async (
+    bookingData,
+    bookParam,
+    user,
+    slots,
+    helper
+  ) => {
+    await reserveSlot(bookingData, bookParam, user, slots, helper);
+    await sendNotification(userInfo, bookingData, bookParam, helper, type);
   };
 
   const slotsarr = taken.map((k, index) => {

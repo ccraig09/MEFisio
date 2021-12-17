@@ -6,7 +6,7 @@ import ClassStartItem from "../components/ClassStartItem";
 const DetailsScreen = ({ route, navigation }) => {
   const [Level1, setLevel1] = useState([]);
 
-  const { service } = route.params;
+  const { service, userInfo, type } = route.params;
   //   console.log("section", data);
   //   console.log("and this the key", classId);
 
@@ -22,7 +22,7 @@ const DetailsScreen = ({ route, navigation }) => {
       description={service.subDetail}
       info={service.info}
       onVideoClick={() => {
-        navigation.navigate("Select");
+        navigation.navigate("Select", { userInfo: userInfo, type: type });
       }}
     />
   );

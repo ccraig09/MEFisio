@@ -22,9 +22,9 @@ import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { AuthContext } from "../navigation/AuthProvider";
 
 const VerifyScreen = ({ route }) => {
-  const { phoneLogin } = useContext(AuthContext);
+  const { phoneRegister, phoneLogin } = useContext(AuthContext);
 
-  const { verificationId, fName, lName, age, cell } = route.params;
+  const { verificationId, fName, lName, age, cell, login } = route.params;
   const recaptchaVerifier = useRef(null);
   const [verificationCode, setVerificationCode] = useState();
 
@@ -35,7 +35,11 @@ const VerifyScreen = ({ route }) => {
       verificationId,
       verificationCode
     );
-    phoneLogin(credential, fName, lName, age, cell);
+    if (login) {
+      phoneLogin(credential);
+    } else {
+      phoneRegister(credential, fName, lName, age, cell);
+    }
   };
 
   return (

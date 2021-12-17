@@ -14,6 +14,10 @@ import Colors from "../constants/Colors";
 import * as Animatable from "react-native-animatable";
 
 const SelectScreen = ({ route, navigation }) => {
+  const userInfo = route.params.userInfo;
+  const type = route.params.type;
+
+  console.log("from select screen", userInfo, type);
   return (
     <View style={styles.container}>
       <Text
@@ -41,7 +45,11 @@ const SelectScreen = ({ route, navigation }) => {
             size={150}
             source={require("../assets/Mayyra.png")}
             onPress={() => {
-              navigation.navigate("booking", { helper: "Mayra" });
+              navigation.navigate("booking", {
+                helper: "Mayra",
+                userInfo: userInfo,
+                type: type,
+              });
             }}
           />
           <Text style={styles.nameText}>Mayra</Text>
@@ -53,7 +61,11 @@ const SelectScreen = ({ route, navigation }) => {
             size={150}
             source={require("../assets/Emmm.png")}
             onPress={() => {
-              navigation.navigate("booking", { helper: "Emma" });
+              navigation.navigate("booking", {
+                helper: "Emma",
+                userInfo: userInfo,
+                type: type,
+              });
             }}
           />
           <Text style={styles.nameText}>Emma</Text>

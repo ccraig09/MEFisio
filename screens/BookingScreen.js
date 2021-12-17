@@ -17,12 +17,20 @@ let screenHeight = Dimensions.get("window").height;
 const BookingScreen = ({ route, navigation }) => {
   const [selected, setSelected] = useState();
   const helper = route.params;
+  const userInfo = route.params.userInfo;
+  const type = route.params.type;
 
   const onDayPress = (day) => {
     console.log("print day", day);
     setSelected(day.dateString);
-    navigation.navigate("Slot", { bookingDate: day, helper: helper });
+    navigation.navigate("Slot", {
+      bookingDate: day,
+      helper: helper,
+      userInfo: userInfo,
+      type: type,
+    });
   };
+  console.log("anything on thee user?", userInfo);
 
   return (
     <SafeAreaView style={styles.container}>
