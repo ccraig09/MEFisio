@@ -44,7 +44,12 @@ const AppStack = () => {
       <Stack.Screen
         name="booking"
         component={Booking}
-        options={{ headerShown: true, animation: "fade" }}
+        options={{
+          headerShown: true,
+          animation: "fade",
+          title: "Fecha",
+          headerTintColor: "#5B91A6",
+        }}
       />
       <Stack.Screen
         name="Slot"

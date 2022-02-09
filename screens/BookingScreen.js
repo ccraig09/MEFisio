@@ -61,8 +61,6 @@ const BookingScreen = ({ route, navigation }) => {
           arrowColor: Colors.primary,
         }}
       />
-      {/* <Calendar
-      /> */}
     </SafeAreaView>
   );
 };
