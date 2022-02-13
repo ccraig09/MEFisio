@@ -363,6 +363,23 @@ export const AuthProvider = ({ children, navigation }) => {
             alert(e);
             console.log(e);
           }
+          try {
+            await firebase
+              .firestore()
+              .collection("Notifications")
+              .doc(`${helper}`)
+              .collection("Marked Dates")
+              .doc("marked")
+              .set(
+                {
+                  [date]: { marked: true },
+                },
+                { merge: true }
+              );
+          } catch (e) {
+            alert(e);
+            console.log(e);
+          }
         },
         reserveSlot: async (bookingData, bookParam, user, slots, helper) => {
           const status = bookingData.status;
