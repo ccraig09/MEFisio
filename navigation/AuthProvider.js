@@ -284,10 +284,12 @@ export const AuthProvider = ({ children, navigation }) => {
           const time = bookingData.k.slot;
           const date = bookParam.bookingDate.dateString;
           const Name = userInfo.FirstName;
+          const Last = userInfo.LastName;
           const Cell = userInfo.Cell;
           const Age = userInfo.Age;
           const userId = userInfo.userId;
-          console.log(Name, Cell, Age, userId);
+          const increment = firebase.firestore.FieldValue.increment(1);
+          // console.log(Name, Cell, Age, userId);
           // let array = {};
           // array[date] = [
           //   {
@@ -346,11 +348,14 @@ export const AuthProvider = ({ children, navigation }) => {
           try {
             await firebase
               .firestore()
-              .collection("Notifications")
+              .collection("Data")
+              .doc(`${helper}`)
+              .collection("Slots")
               .doc(`${helper}`)
               .update({
                 [date]: firebase.firestore.FieldValue.arrayUnion({
                   Name: Name,
+                  Last: Last,
                   Cell: Cell,
                   Age: Age,
                   userId: userId,
@@ -358,6 +363,83 @@ export const AuthProvider = ({ children, navigation }) => {
                   Type: type,
                   read: false,
                 }),
+              });
+          } catch (e) {
+            alert(e);
+            console.log(e);
+          }
+          try {
+            await firebase
+              .firestore()
+              .collection("Data")
+              .doc(`${helper}`)
+              .collection("Marked Dates")
+              .doc("marked")
+              .set(
+                {
+                  [date]: { marked: true },
+                },
+                { merge: true }
+              );
+          } catch (e) {
+            alert(e);
+            console.log(e);
+          }
+          try {
+            await firebase
+              .firestore()
+              .collection("Notifications")
+              .doc(`${helper}`)
+
+              .set(
+                {
+                  TotalDates: increment,
+                },
+                { merge: true }
+              );
+          } catch (e) {
+            alert(e);
+            console.log(e);
+          }
+        },
+        createNotification: async (
+          userInfo,
+          bookingData,
+          bookParam,
+          helper,
+          type
+        ) => {
+          const time = bookingData.k.slot;
+          const startTime = bookingData.startTime;
+          const endTime = bookingData.endTime;
+          const date = bookParam.bookingDate.dateString;
+          const Name = userInfo.FirstName;
+          const Last = userInfo.LastName;
+          const Cell = userInfo.Cell;
+          const Age = userInfo.Age;
+          const userId = userInfo.userId;
+          console.log(Name, Last, Cell, Age, userId);
+
+          try {
+            await firebase
+              .firestore()
+              .collection("Data")
+              .doc(`${helper}`)
+              .collection("Client Notifications")
+              .doc()
+              .set({
+                Date: date,
+                Name: Name,
+                Last: Last,
+                Cell: Cell,
+                Age: Age,
+                userId: userId,
+                Time: time,
+                startTime,
+                endTime,
+                Type: type,
+                read: false,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
               });
           } catch (e) {
             alert(e);

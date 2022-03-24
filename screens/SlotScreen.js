@@ -13,6 +13,16 @@ import firebase from "../components/firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 import { AuthContext } from "../navigation/AuthProvider";
+import * as Notifications from "expo-notifications";
+import Toast from "react-native-tiny-toast";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 
 // const jsonData = {
 //   slots: {
@@ -28,31 +38,60 @@ import { AuthContext } from "../navigation/AuthProvider";
 
 let slots = [
   {
-    slot: "9:00am a 10:00am",
+    slot: "9:00am - 10:00am",
+    startTime: "09:00:00",
+    endTime: "10:00:00",
     isReserved: false,
+    order: 1,
   },
   {
-    slot: "10:00am a 11:00am",
+    slot: "10:00am - 11:00am",
+    startTime: "10:00:00",
+    endTime: "11:00:00",
     isReserved: false,
-  },
-  { slot: "11:00am a 12:00pm", isReserved: false },
-  {
-    slot: "15:00pm a 16:00pm",
-    isReserved: false,
+    order: 2,
   },
   {
-    slot: "17:00pm a 18:00pm",
+    slot: "11:00am - 12:00pm",
+    startTime: "11:00:00",
+    endTime: "12:00:00",
     isReserved: false,
+    order: 3,
+  },
+  ,
+  {
+    slot: "15:00pm - 16:00pm",
+    startTime: "15:00:00",
+    endTime: "16:00:00",
+    isReserved: false,
+    order: 4,
   },
   {
-    slot: "18:00pm a 19:00pm",
+    slot: "17:00pm - 18:00pm",
+    startTime: "17:00:00",
+    endTime: "18:00:00",
     isReserved: false,
+    order: 5,
   },
-  { slot: "19:00pm a 20:00pm", isReserved: false },
+  {
+    slot: "18:00pm - 19:00pm",
+    startTime: "18:00:00",
+    endTime: "19:00:00",
+    isReserved: false,
+    order: 6,
+  },
+  {
+    slot: "19:00pm - 20:00pm",
+    startTime: "19:00:00",
+    endTime: "20:00:00",
+    isReserved: false,
+    order: 7,
+  },
 ];
 
 const SlotScreen = ({ route, navigation }) => {
-  const { reserveSlot, user, sendNotification } = useContext(AuthContext);
+  const { reserveSlot, user, sendNotification, createNotification } =
+    useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState();
   const [bookingDate, setBookingDate] = useState();
@@ -114,7 +153,7 @@ const SlotScreen = ({ route, navigation }) => {
 
   const slotHandler = () => {
     console.log("we gogt user data? data?", userInfo);
-    Alert.alert(`Confirmar hora por `, `${bookingData.slots}?`, [
+    Alert.alert(`Confirmar hora`, `${bookingData.slots} servicio de ${type}?`, [
       {
         text: "No",
         style: "destructive",
@@ -136,8 +175,36 @@ const SlotScreen = ({ route, navigation }) => {
     slots,
     helper
   ) => {
+    const toast = Toast.showLoading("Realizando Reservacion");
+
+    // console.log("noti data", user, bookParam, slots);
     await reserveSlot(bookingData, bookParam, user, slots, helper);
     await sendNotification(userInfo, bookingData, bookParam, helper, type);
+    await createNotification(userInfo, bookingData, bookParam, helper, type);
+    triggerNotificationHandler(bookingData, bookParam);
+    Toast.hide(toast);
+
+    navigation.navigate("Review");
+  };
+  const triggerNotificationHandler = (bookingData, bookParam) => {
+    // const coaches = coachList.map((code) => code.expoPushToken);
+    // console.log("cheses", coaches);
+
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: ["ExponentPushToken[ZBOucGIEvzCfrFdeUalJAf]"],
+        sound: "default",
+        data: { extraData: userInfo },
+        title: `${userInfo.FirstName} ${userInfo.LastName} quisiera reservar!`,
+        body: `${userInfo.FirstName} quisiera reservar en el horario de ${bookingData.k.slot} en la fecha de ${bookParam.bookingDate.dateString} para ${type}.`,
+      }),
+    });
   };
 
   const slotsarr = taken.map((k, index) => {
@@ -156,6 +223,8 @@ const SlotScreen = ({ route, navigation }) => {
               k: k,
               slots: k.slot,
               isReserved: k.isReserved,
+              startTime: k.startTime,
+              endTime: k.endTime,
             })
           }
           text={k.slot}

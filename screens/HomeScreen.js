@@ -105,12 +105,12 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.subtitle}>{greetingMessage}, </Text>
         <Text style={styles.hello}>{userInfo.FirstName} </Text>
       </View>
-      <Button
+      {/* <Button
         title=" go to pdf"
         onPress={() => {
           navigation.navigate("Pdf");
         }}
-      />
+      /> */}
       <FlatList
         showsHorizontalScrollIndicator={false}
         data={data}

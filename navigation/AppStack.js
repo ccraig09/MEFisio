@@ -5,6 +5,7 @@ import Details from "../screens/DetailsScreen";
 import Pdf from "../screens/PdfScreen";
 import Booking from "../screens/BookingScreen";
 import Slot from "../screens/SlotScreen";
+import Review from "../screens/ReviewScreen";
 import Select from "../screens/SelectScreen";
 // import Signup from '../src/screens/signup';
 // import Preguntas from '../src/screens/preguntas';
@@ -55,6 +56,11 @@ const AppStack = () => {
         name="Slot"
         component={Slot}
         options={{ headerShown: true, animation: "fade" }}
+      />
+      <Stack.Screen
+        name="Review"
+        component={Review}
+        options={{ headerShown: false, animation: "fade" }}
       />
       {/* 
       <Stack.Screen
