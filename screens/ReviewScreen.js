@@ -18,9 +18,11 @@ const ReviewScreen = ({ navigation }) => {
 
   setTimeout(() => {
     navigation.navigate("Home");
-  }, 4000);
+  }, 3000);
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    >
       <LottieView
         source={require("../assets/lottie/81484-confirmation-spinner.json")}
         autoPlay
